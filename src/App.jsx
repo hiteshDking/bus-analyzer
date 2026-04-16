@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { analyzeBusData } from './services/aiService';
 import VoiceInput from './components/VoiceInput';
+import BusMap from './components/BusMap';
 import { fetchRealBusData } from './services/busApiService';
 import './App.css';
 
@@ -167,6 +168,15 @@ function App() {
       </div>
 
       <footer className="footer">
+                <div className="bus-list">
+        <h2>Current Bus Schedule</h2>
+        {/* ... table code ... */}
+      </div>
+
+      {/* NEW: Map Section */}
+      <BusMap />
+
+      <footer className="footer"></footer>
         <div className="footer-content">
           <p>🚌 Bus Analyzer | Powered by OpenRouter AI | Voice Enabled | Real Transit API</p>
           <div className="footer-links">
