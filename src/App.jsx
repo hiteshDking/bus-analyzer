@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { analyzeBusData } from './services/aiService';
 import VoiceInput from './components/VoiceInput';
 import './App.css';
@@ -8,6 +8,11 @@ function App() {
   const [aiResponse, setAiResponse] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    // Check local storage for dark mode preference
+    const savedMode = localStorage.getItem('darkMode');
+    return savedMode === 'enabled';
+  });
   
   const [sampleBuses] = useState([
     { id: 1, route: "Route 101", busNumber: "B-101", status: "Active", passengers: 23 },
@@ -15,6 +20,21 @@ function App() {
     { id: 3, route: "Route 103", busNumber: "B-103", status: "Delayed", passengers: 12 },
     { id: 4, route: "Route 104", busNumber: "B-104", status: "Active", passengers: 34 },
   ]);
+
+  // Apply dark mode class to body
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+      localStorage.setItem('darkMode', 'enabled');
+    } else {
+      document.body.classList.remove('dark-mode');
+      localStorage.setItem('darkMode', 'disabled');
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   const handleAskAI = async () => {
     if (!searchTerm.trim()) {
@@ -32,7 +52,6 @@ function App() {
 
   const handleVoiceText = (spokenText) => {
     setSearchTerm(spokenText);
-    // Auto-analyze after voice input (optional - comment out if you want manual submit)
     setTimeout(() => {
       handleAskAI();
     }, 100);
@@ -45,8 +64,13 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <h1>🚌 Bus Analyzer with Voice AI</h1>
+    <div className={`app ${darkMode ? 'dark' : ''}`}>
+      <h1>
+        🚌 Bus Analyzer with Voice AI
+        <button onClick={toggleDarkMode} className="dark-mode-toggle">
+          {darkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+        </button>
+      </h1>
       
       <div className="search-section">
         <input 
@@ -125,6 +149,22 @@ function App() {
           </tbody>
         </table>
       </div>
+
+      <footer className="footer">
+        <div className="footer-content">
+          <p>🚌 Bus Analyzer | Powered by OpenRouter AI | Voice Enabled</p>
+          <div className="footer-links">
+            <a href="https://github.com/hiteshDking/bus-analyzer" target="_blank" rel="noopener noreferrer">
+              📦 View on GitHub
+            </a>
+            <span className="footer-separator">|</span>
+            <a href="https://vercel.com/hiteshdking/bus-analyzer" target="_blank" rel="noopener noreferrer">
+              🚀 Deployed on Vercel
+            </a>
+          </div>
+          <p className="footer-copyright">© 2026 Bus Analyzer | Made with ❤️ for better commuting</p>
+        </div>
+      </footer>
     </div>
   );
 }
