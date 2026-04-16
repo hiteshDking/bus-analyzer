@@ -1,0 +1,121 @@
+/* Voice Input Button Styles */
+.mic-button {
+  padding: 12px 24px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.mic-button:hover {
+  background-color: #45a049;
+  transform: scale(1.05);
+}
+
+.mic-button.listening {
+  background-color: #ff4444;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.listening-indicator {
+  background-color: #ff4444;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  margin: 10px 0;
+  font-weight: bold;
+  animation: pulse 1.5s infinite;
+}
+
+.search-section {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  padding: 12px;
+  width: 350px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.search-input:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+.ask-button {
+  padding: 12px 24px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.ask-button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.ask-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+/* Status colors */
+.status-active {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.status-on-time {
+  color: #2196F3;
+  font-weight: bold;
+}
+
+.status-delayed {
+  color: #ff4444;
+  font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .search-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .search-input {
+    width: 90%;
+  }
+  
+  .mic-button, .ask-button {
+    width: 90%;
+  }
+}
