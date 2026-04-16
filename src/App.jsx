@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { analyzeBusData } from './services/aiService';
 import VoiceInput from './components/VoiceInput';
+import { fetchRealBusData } from './services/busApiService';
 import './App.css';
 
 function App() {
@@ -9,17 +10,11 @@ function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
-    // Check local storage for dark mode preference
     const savedMode = localStorage.getItem('darkMode');
     return savedMode === 'enabled';
   });
-  
-  const [sampleBuses] = useState([
-    { id: 1, route: "Route 101", busNumber: "B-101", status: "Active", passengers: 23 },
-    { id: 2, route: "Route 102", busNumber: "B-102", status: "On Time", passengers: 45 },
-    { id: 3, route: "Route 103", busNumber: "B-103", status: "Delayed", passengers: 12 },
-    { id: 4, route: "Route 104", busNumber: "B-104", status: "Active", passengers: 34 },
-  ]);
+  const [loading, setLoading] = useState(true);
+  const [sampleBuses, setSampleBuses] = useState([]);
 
   // Apply dark mode class to body
   useEffect(() => {
@@ -31,6 +26,17 @@ function App() {
       localStorage.setItem('darkMode', 'disabled');
     }
   }, [darkMode]);
+
+  // Load real bus data from API
+  useEffect(() => {
+    const loadBuses = async () => {
+      setLoading(true);
+      const realBuses = await fetchRealBusData();
+      setSampleBuses(realBuses);
+      setLoading(false);
+    };
+    loadBuses();
+  }, []);
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -62,6 +68,16 @@ function App() {
       handleAskAI();
     }
   };
+
+  // Show loading screen while fetching data
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading real bus data from transit API... 🚌</p>
+      </div>
+    );
+  }
 
   return (
     <div className={`app ${darkMode ? 'dark' : ''}`}>
@@ -152,7 +168,7 @@ function App() {
 
       <footer className="footer">
         <div className="footer-content">
-          <p>🚌 Bus Analyzer | Powered by OpenRouter AI | Voice Enabled</p>
+          <p>🚌 Bus Analyzer | Powered by OpenRouter AI | Voice Enabled | Real Transit API</p>
           <div className="footer-links">
             <a href="https://github.com/hiteshDking/bus-analyzer" target="_blank" rel="noopener noreferrer">
               📦 View on GitHub
